@@ -1,0 +1,147 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.scijava</groupId>
+		<artifactId>pom-scijava</artifactId>
+		<version>25.0.0</version>
+	</parent>
+	<groupId>org.mastodon</groupId>
+	<artifactId>elephant-ctc</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>ELEPHANT-CTC</name>
+	<description> executalbe for Cell Tracking Challenge</description>
+	<url>TBD</url>
+	<inceptionYear>2020</inceptionYear>
+	<organization>
+		<name>IGFL</name>
+		<url>http://igfl.ens-lyon.fr/</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>Simplified BSD License</name>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.trackmate</groupId>
+			<artifactId>trackmate</artifactId>
+			<version>1.0.0-beta-13</version>
+		</dependency>
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.eclipsesource.minimal-json</groupId>
+			<artifactId>minimal-json</artifactId>
+			<version>0.9.5</version>
+		</dependency>
+	</dependencies>
+	<developers>
+		<developer>
+			<id>ksugar</id>
+			<name>Ko Sugawara</name>
+			<email>ko.sugawara@ens-lyon.fr</email>
+			<url>http://igfl.ens-lyon.fr/igfl/annuaire/sugawara-ko</url>
+			<organization>IGFL</organization>
+			<organizationUrl>http://igfl.ens-lyon.fr</organizationUrl>
+			<roles>
+				<role>lead</role>
+				<role>developer</role>
+			</roles>
+		</developer>
+	</developers>
+	<contributors>
+		<contributor>
+			<name>Ko Sugawara</name>
+		</contributor>
+	</contributors>
+	<mailingLists>
+		<mailingList>
+			<name>Image.sc Forum</name>
+			<archive>https://forum.image.sc/</archive>
+		</mailingList>
+	</mailingLists>
+	<scm>
+		<connection>scm:git:git://github.com/[MY-ORG]/[MY-REPO]</connection>
+		<developerConnection>scm:git:git@github.com:[MY-ORG]/[MY-REPO]</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/[MY-ORG]/[MY-REPO]</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub</system>
+		<url>TBD</url>
+	</issueManagement>
+	<ciManagement>
+		<system>Travis CI</system>
+		<!-- <url>TBD</url> -->
+	</ciManagement>
+	<properties>
+		<package-name>elephant</package-name>
+
+		<license.licenseName>not licensed yet</license.licenseName>
+		<license.projectName>elephant-ctc</license.projectName>
+		<license.organizationName>IGFL</license.organizationName>
+		<license.copyrightOwners>Ko Sugawara</license.copyrightOwners>
+
+		<!-- NB: Deploy releases to the ImageJ Maven repository. -->
+		<!-- <releaseProfiles>deploy-to-imagej</releaseProfiles> -->
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/lib</outputDirectory>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>false</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<goals>
+					<goal>jar</goal>
+				</goals>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+							<mainClass>org.elephant.ElephantCTC</mainClass>
+						</manifest>
+					</archive>
+					<includes>
+						<include>org/elephant/ElephantCTC*.class</include>
+					</includes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>imagej.public</id>
+			<url>https://maven.scijava.org/content/groups/public</url>
+		</repository>
+	</repositories>
+</project>
