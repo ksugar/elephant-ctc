@@ -72,7 +72,7 @@ public class ElephantCTC
 			final ProcessBuilder pb = new ProcessBuilder().inheritIO();
 			pb.environment().put( "CTC", "1" );
 			pb.command(
-					"./run_elephant", "detection",
+					"./run_elephant.sh", "detection",
 					args[ 0 ],
 					args[ 2 ],
 					SPOTS_FILENAME ).start().waitFor();
@@ -84,11 +84,6 @@ public class ElephantCTC
 			catch ( final NoSuchFileException e )
 			{
 				System.out.println( "detection failed" );
-				pb.command(
-						"./run_elephant_debug", "detection",
-						args[ 0 ],
-						args[ 2 ],
-						SPOTS_FILENAME ).start().waitFor();
 				System.exit( 1 );
 			}
 			System.out.println( "detection completed" );
@@ -145,7 +140,7 @@ public class ElephantCTC
 				if ( config.get( "use_opticalflow" ).asBoolean() )
 				{
 					pb.command(
-							"./run_elephant", "linking",
+							"./run_elephant.sh", "linking",
 							args[ 0 ],
 							args[ 2 ],
 							SPOTS_FILENAME ).start().waitFor();
@@ -215,7 +210,7 @@ public class ElephantCTC
 				e.printStackTrace();
 			}
 			pb.command(
-					"./run_elephant", "export",
+					"./run_elephant.sh", "export",
 					args[ 0 ],
 					args[ 2 ],
 					SPOTS_FILENAME,
