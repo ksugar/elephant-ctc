@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -48,8 +49,6 @@ public class ElephantCTC
 
 	private static final int UNSET = -1;
 
-	private static final String SPOTS_FILENAME = "spots.json";
-
 	private static final String RES_FILENAME = "res_track.txt";
 
 	private static int id;
@@ -68,6 +67,8 @@ public class ElephantCTC
 			// Load config
 			final JsonObject config = Json.parse( readString( args[ 2 ] ) ).asObject();
 
+			final String spotsFileName = UUID.randomUUID().toString() + ".json";
+
 			// Detection
 			final ProcessBuilder pb = new ProcessBuilder().inheritIO();
 			pb.environment().put( "CTC", "1" );
@@ -75,11 +76,11 @@ public class ElephantCTC
 					"./run_elephant.sh", "detection",
 					args[ 0 ],
 					args[ 2 ],
-					SPOTS_FILENAME ).start().waitFor();
+					spotsFileName ).start().waitFor();
 			String jsonString = null;
 			try
 			{
-				jsonString = readString( SPOTS_FILENAME );
+				jsonString = readString( spotsFileName );
 			}
 			catch ( final NoSuchFileException e )
 			{
@@ -133,7 +134,7 @@ public class ElephantCTC
 				final JsonObject jsonTra = Json.object()
 						.add( "t", timepoint )
 						.add( "spots", jsonSpotsTraIn );
-				try (PrintWriter out = new PrintWriter( SPOTS_FILENAME ))
+				try (PrintWriter out = new PrintWriter( spotsFileName ))
 				{
 					out.println( jsonTra.toString() );
 				}
@@ -143,10 +144,10 @@ public class ElephantCTC
 							"./run_elephant.sh", "linking",
 							args[ 0 ],
 							args[ 2 ],
-							SPOTS_FILENAME ).start().waitFor();
+							spotsFileName ).start().waitFor();
 				}
 				System.out.println( "run_linking completed" );
-				final JsonArray jsonSpotsTraOut = Json.parse( readString( SPOTS_FILENAME ) ).asObject().get( "spots" ).asArray();
+				final JsonArray jsonSpotsTraOut = Json.parse( readString( spotsFileName ) ).asObject().get( "spots" ).asArray();
 				linkSpots( model, jsonSpotsTraOut, timepoint, timepointIterator, pos, cov, config );
 				System.out.println( ( model.getGraph().edges().size() - totalEdges ) + " edges were detected at timepoint " + timepoint );
 				totalEdges = model.getGraph().edges().size();
@@ -179,7 +180,7 @@ public class ElephantCTC
 			{
 				model.getGraph().getLock().readLock().unlock();
 			}
-			try (PrintWriter out = new PrintWriter( SPOTS_FILENAME ))
+			try (PrintWriter out = new PrintWriter( spotsFileName ))
 			{
 				out.println( jsonSpotsExport.toString() );
 			}
@@ -213,9 +214,10 @@ public class ElephantCTC
 					"./run_elephant.sh", "export",
 					args[ 0 ],
 					args[ 2 ],
-					SPOTS_FILENAME,
+					spotsFileName,
 					"--output", args[ 1 ] ).start().waitFor();
 			System.out.println( "run_export completed" );
+			Files.deleteIfExists( Paths.get( spotsFileName ) );
 		}
 		catch ( final IOException e )
 		{
