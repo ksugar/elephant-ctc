@@ -70,10 +70,10 @@
 		</mailingList>
 	</mailingLists>
 	<scm>
-		<connection>scm:git:git://github.com/[MY-ORG]/[MY-REPO]</connection>
-		<developerConnection>scm:git:git@github.com:[MY-ORG]/[MY-REPO]</developerConnection>
-		<tag>HEAD</tag>
-		<url>https://github.com/[MY-ORG]/[MY-REPO]</url>
+		<connection>scm:git:git://github.com/ksugar/elephant-ctc</connection>
+		<developerConnection>scm:git:git@github.com:ksugar/elephant-ctc</developerConnection>
+		<tag>elephant-ctc-0.1.0</tag>
+		<url>https://github.com/ksugar/elephant-ctc</url>
 	</scm>
 	<issueManagement>
 		<system>GitHub</system>
